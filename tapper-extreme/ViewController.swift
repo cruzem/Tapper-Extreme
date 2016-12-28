@@ -8,18 +8,85 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+class ViewController: UIViewController, UITextFieldDelegate {
+    //Properties
+    var maxTaps = 0
+    var currentTaps = 0
+    
+    
+    //Outlets
+    @IBOutlet weak var logoImg: UIImageView!
+    @IBOutlet weak var howManyTapsTxt: UITextField!
+    @IBOutlet weak var playBtn: UIButton!
+    
+    @IBOutlet weak var tapBtn: UIButton!
+    @IBOutlet weak var tapsLbl: UILabel!
+    
+    @IBAction func onCoinTapped(_ sender: UIButton) {
+        currentTaps += 1
+        updateTapsLabels()
+        
+        if isGameOver() {
+            restartGame()
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func onPlayBtnPressed(_ sender: UIButton!) {
+        
+        if howManyTapsTxt.text != nil && howManyTapsTxt.text != "" {
+            
+            logoImg.isHidden = true
+            playBtn.isHidden = true
+            howManyTapsTxt.isHidden = true
+            
+            tapBtn.isHidden = false
+            tapsLbl.isHidden = false
+            
+            maxTaps = Int(howManyTapsTxt.text!)!
+            currentTaps = 0
+            
+            updateTapsLabels()
+        }
     }
+    
+    func restartGame() {
+        maxTaps = 0
+        howManyTapsTxt.text = ""
+        
+        logoImg.isHidden = false
+        playBtn.isHidden = false
+        howManyTapsTxt.isHidden = false
+        
+        tapBtn.isHidden = true
+        tapsLbl.isHidden = true
+        
+        
+    }
+    
+    func updateTapsLabels() {
+        tapsLbl.text = "\(currentTaps) Taps"
+        
+    }
+    
+    func isGameOver() -> Bool {
+        if currentTaps >= maxTaps {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // Called when return key is pressed, return no to ignore.
+    
 
-
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    
 }
+
+
+
+
 
